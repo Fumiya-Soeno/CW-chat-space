@@ -4,14 +4,14 @@
       .war-side-bar__user-name__name-box__user
         = current_user.name
       .war-side-bar__user-name__name-box__icon
-        = link_to new_group_path do
+        = link_to new_user_team_path(current_user) do
           = icon('far', 'edit')
         = link_to edit_user_path(current_user) do
           = icon('fas', 'cog')
   .war-side-bar__group-list
-    - current_user.groups.each do |group|
-      = link_to group_messages_path(group) do
+    - current_user.teams.each do |team|
+      = link_to "#" do
         .war-side-bar__group-list__group-name
-          = group.name
+          = team.name
         .war-side-bar__group-list__latest-message
-          = group.show_last_message
+          = team.char
