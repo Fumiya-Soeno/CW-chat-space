@@ -14,7 +14,7 @@
 - has_many :groups, through: :groups_users
 - has_many :teams
 
-##teamsテーブル
+## teamsテーブル
 チームを定義します。
 ・1人のユーザーによって所有されます。
 ・複数の文字(chars)を所有できます。
@@ -32,7 +32,7 @@ has_many :chars
 **Validation**
 validates :char_id, length: { in: 4..16 } ←文字数制限の定義方法を調査中
 
-##charsテーブル
+## charsテーブル
 　・　ユーザーの指定した文字の情報がテーブルに存在すれば情報を渡します。
 　・　ユーザーの指定した文字の情報がテーブルに存在しなければ新たに情報をランダム生成して格納します。
 　・　1つのチームに所有されます。
@@ -56,7 +56,7 @@ belongs_to: btype
 belongs_to: mtype
 belongs_to: element
 
-##btypesテーブル
+## btypesテーブル
 　・　このテーブルは予め情報を入れ、編集しません。
 　・　1つのcharによって所有されます。
 　・　"space"には攻撃する座標の位置を指定します。←恐らく、もう一つテーブルの追加が必要?
@@ -68,7 +68,7 @@ belongs_to: element
 **Assosiation**
 belongs_to: char
 
-##mtypesテーブル
+## mtypesテーブル
 　・　このテーブルは予め情報を入れ、編集しません。
 　・　1つのcharによって所有されます。
 　・　"move"には移動方法の種類を定義します。←恐らく、もう一つテーブルの追加が必要?
@@ -80,7 +80,7 @@ belongs_to: char
 **Assosiation**
 belongs_to: char
 
-##elementsテーブル
+## elementsテーブル
 　・　このテーブルは予め情報を入れ、編集しません。
 　・　1つのcharによって所有されます。
 　・　"ratio-to"には各属性に与える攻撃力の倍率が入ります。
