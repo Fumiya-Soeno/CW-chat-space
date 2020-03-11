@@ -12,6 +12,6 @@
     - current_user.teams.each do |team|
       = link_to "#" do
         .war-side-bar__group-list__group-name
-          = team.name
+          = "【TEAM】#{team.name}"
         .war-side-bar__group-list__latest-message
-          = team.char
+          = "【CHAR】#{team.char}"
