@@ -1,17 +1,17 @@
-.side-bar
-  .side-bar__user-name
-    .side-bar__user-name__name-box
-      .side-bar__user-name__name-box__user
+.war-side-bar
+  .war-side-bar__user-name
+    .war-side-bar__user-name__name-box
+      .war-side-bar__user-name__name-box__user
         = current_user.name
-      .side-bar__user-name__name-box__icon
+      .war-side-bar__user-name__name-box__icon
         = link_to new_group_path do
           = icon('far', 'edit')
         = link_to edit_user_path(current_user) do
           = icon('fas', 'cog')
-  .side-bar__group-list
+  .war-side-bar__group-list
     - current_user.groups.each do |group|
       = link_to group_messages_path(group) do
-        .side-bar__group-list__group-name
+        .war-side-bar__group-list__group-name
           = group.name
-        .side-bar__group-list__latest-message
+        .war-side-bar__group-list__latest-message
           = group.show_last_message
