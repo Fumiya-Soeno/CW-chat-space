@@ -85,15 +85,27 @@ $CLgray: #434a54;
         }
       }
     }
-    &__edit-btn {
-      height: 40px;
-      padding: 0 20px;
-      font-size: 16px;
-      cursor: pointer;
-      color: $CLblue;
-      line-height: 40px;
-      border: 1px solid $CLblue;
+    &__right-box{
+      display: flex;
+      &__btn {
+        height: 40px;
+        font-size: 16px;
+        line-height: 40px;
+        &_war {
+          margin: 0 5px;
+          padding: 0 20px;
+          color: #CC3E44;
+          border: 1px solid #CC3E44;
+        }
+        &_edit {
+          margin: 0 5px;
+          padding: 0 20px;
+          color: $CLblue;
+          border: 1px solid $CLblue;
+        }
+      }
     }
+
   }
   &__message-list {
     padding: 46px 40px;
