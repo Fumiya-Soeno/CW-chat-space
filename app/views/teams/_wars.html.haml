@@ -1,0 +1,38 @@
+#field{:faseNum => 0,:action => war_user_teams_path(current_user),:name => "data[data]"}
+  - for j in 1..16 do
+    .fields{class: "d-none"}
+      - @fields.each.with_index(1) do|f,i|
+        - if i >= 16*j-15 && i < 16*j+1
+          .field{id: "ID_#{i}", class: "d-none"}
+            - @chars.each do|char|
+              - if char.id == f.char_id
+                = char.name
+  - for j in 17..32 do
+    .fields
+      - @fields.each.with_index(1) do|f,i|
+        - if i >= 16*j-15 && i < 16*j+1
+          .field{:faseNum => 0,id: "ID_#{i}"}
+            - @chars.each do|char|
+              - if char.id == f.char_id
+                = char.name
+                .status{id: "ST_#{i}"}
+                  = "体力:#{char.vitality}"
+                  %br
+                  = "攻撃:#{char.attack}"
+                  %br
+                  = "速度:#{char.spped}"
+  - for j in 33..48 do
+    .fields{class: "d-none"}
+      - @fields.each.with_index(1) do|f,i|
+        - if i >= 16*j-15 && i < 16*j+1
+          .field{id: "ID_#{i}", class: "d-none"}
+            - @chars.each do|char|
+              - if char.id == f.char_id
+                = char.name
+%br
+- @teamChar[0].each do|t|
+  - @chars.each do|char|
+    - if t == char.name
+      = t
+      = char.vitality
+  %br

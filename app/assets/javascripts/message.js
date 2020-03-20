@@ -1,5 +1,6 @@
 $(function(){
   function buildHTML(message){
+  console.log(message);
   image = (message.image) ? `<img class= "main-chat__message-list__message__main__image" src=${message.image} >` : "";
   var html =
     `

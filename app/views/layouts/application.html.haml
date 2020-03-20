@@ -1,7 +1,9 @@
 !!!
 %html
   %head
-    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %script{src: "https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"}
+    %script{src: "https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"}
+    %meta{content:  "text/html; charset=UTF-8", "http-equiv": "Content-Type"}/
     %title ChatSpace
     = csrf_meta_tags
     = stylesheet_link_tag    'application', media: 'all'

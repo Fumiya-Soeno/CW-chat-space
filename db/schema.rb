@@ -10,7 +10,45 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200311050430) do
+ActiveRecord::Schema.define(version: 20200320065912) do
+
+  create_table "battles", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "name", null: false
+  end
+
+  create_table "chars", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string  "name",        null: false
+    t.integer "vitality",    null: false
+    t.integer "attack",      null: false
+    t.integer "spped",       null: false
+    t.integer "battle_id",   null: false
+    t.integer "movement_id", null: false
+    t.integer "element_id",  null: false
+    t.index ["battle_id"], name: "index_chars_on_battle_id", using: :btree
+    t.index ["element_id"], name: "index_chars_on_element_id", using: :btree
+    t.index ["movement_id"], name: "index_chars_on_movement_id", using: :btree
+  end
+
+  create_table "elements", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "name",                      null: false
+    t.float  "to_fire",        limit: 24, null: false
+    t.float  "to_water",       limit: 24, null: false
+    t.float  "to_wood",        limit: 24, null: false
+    t.float  "to_lightness",   limit: 24, null: false
+    t.float  "to_darkness",    limit: 24, null: false
+    t.float  "from_fire",      limit: 24, null: false
+    t.float  "from_water",     limit: 24, null: false
+    t.float  "from_wood",      limit: 24, null: false
+    t.float  "from_lightness", limit: 24, null: false
+    t.float  "from_darkness",  limit: 24, null: false
+  end
+
+  create_table "fields", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer "char_id"
+    t.integer "team_id"
+    t.index ["char_id"], name: "index_fields_on_char_id", using: :btree
+    t.index ["team_id"], name: "index_fields_on_team_id", using: :btree
+  end
 
   create_table "group_users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "group_id"
@@ -39,6 +77,17 @@ ActiveRecord::Schema.define(version: 20200311050430) do
     t.index ["user_id"], name: "index_messages_on_user_id", using: :btree
   end
 
+  create_table "movements", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "name", null: false
+  end
+
+  create_table "team_chars", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer "team_id", null: false
+    t.integer "char_id", null: false
+    t.index ["char_id"], name: "index_team_chars_on_char_id", using: :btree
+    t.index ["team_id"], name: "index_team_chars_on_team_id", using: :btree
+  end
+
   create_table "teams", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name"
     t.string   "char"
@@ -62,9 +111,28 @@ ActiveRecord::Schema.define(version: 20200311050430) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
   end
 
+  create_table "wars", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string  "name"
+    t.integer "char_id"
+    t.integer "vitality"
+    t.integer "attack"
+    t.integer "spped"
+    t.integer "battle_id"
+    t.integer "movement_id"
+    t.integer "element_id"
+    t.integer "team"
+  end
+
+  add_foreign_key "chars", "battles"
+  add_foreign_key "chars", "elements"
+  add_foreign_key "chars", "movements"
+  add_foreign_key "fields", "chars"
+  add_foreign_key "fields", "teams"
   add_foreign_key "group_users", "groups"
   add_foreign_key "group_users", "users"
   add_foreign_key "messages", "groups"
   add_foreign_key "messages", "users"
+  add_foreign_key "team_chars", "chars"
+  add_foreign_key "team_chars", "teams"
   add_foreign_key "teams", "users"
 end
