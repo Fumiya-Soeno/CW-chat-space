@@ -113,6 +113,7 @@ ActiveRecord::Schema.define(version: 20200320065912) do
 
   create_table "wars", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string  "name"
+    t.integer "field_id"
     t.integer "char_id"
     t.integer "vitality"
     t.integer "attack"

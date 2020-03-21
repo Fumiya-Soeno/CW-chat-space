@@ -74,7 +74,7 @@ class TeamsController < ApplicationController
     Field.update_all(char_id: nil,team_id: nil)
     #初期配置状態の反映
     @fields = Field.all
-    @enemyChar = "".chars.reverse()
+    @enemyChar = "卯月コウ".chars.reverse()
     @teamChar = []
     @reserved_field_id = []
     @teams.each do|team|
@@ -85,6 +85,7 @@ class TeamsController < ApplicationController
             if @teamChar[0][num] == char.name
               Field.find(364+num*16-((@teamChar[0].length/2).floor-2)*16).update(char_id: char.id,team_id: $last_team_id)
               @battleChars = War.new
+              @battleChars.field_id = (364+num*16-((@teamChar[0].length/2).floor-2)*16).to_i
               @battleChars.char_id = char.id
               @battleChars.name = char.name
               @battleChars.vitality = char.vitality
@@ -100,6 +101,7 @@ class TeamsController < ApplicationController
             if @enemyChar[num] == char.name
               Field.find(358+num*16-((@enemyChar.length/2).floor-2)*16).update(char_id: char.id,team_id: $last_team_id)
               @battleChars = War.new
+              @battleChars.field_id = (358+num*16-((@enemyChar.length/2).floor-2)*16).to_i
               @battleChars.char_id = char.id
               @battleChars.name = char.name
               @battleChars.vitality = char.vitality
