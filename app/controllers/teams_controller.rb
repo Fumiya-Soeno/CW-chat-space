@@ -74,7 +74,9 @@ class TeamsController < ApplicationController
     Field.update_all(char_id: nil,team_id: nil)
     #初期配置状態の反映
     @fields = Field.all
-    @enemyChar = "卯月コウ".chars.reverse()
+    
+    @enemyChar = "メリッサ・キンレンカ".chars.reverse()
+    # @enemyChar = Team.find(rand(1..Team.all.length)).char.chars.reverse()
     @teamChar = []
     @reserved_field_id = []
     @teams.each do|team|

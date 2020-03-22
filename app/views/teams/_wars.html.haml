@@ -30,9 +30,10 @@
               - if char.id == f.char_id
                 = char.name
 %br
-- @teamChar[0].each do|t|
-  - @chars.each do|char|
-    - if t == char.name
-      = t
-      = char.vitality
-  %br
+= "対戦相手を選んでください"
+%br
+%br
+- @teams.each do |team|
+  -# - if team.user_id != current_user.id
+  .team{id: "team#{team.id}", data: "#{team.char}"}
+    = "【TEAM】#{team.name} 【CHAR】#{team.char}"
