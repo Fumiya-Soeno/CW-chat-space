@@ -28,16 +28,16 @@ class TeamsController < ApplicationController
               @char.attack = rand(50..100)
               sum = @char.vitality.to_i / 10 + @char.attack.to_i
               if sum <= 133
-                @char.spped = 4
+                @char.speed = 4
               elsif sum <=166
-                @char.spped = 3
+                @char.speed = 3
               else
-                @char.spped = 2
+                @char.speed = 2
               end
             when 2 then # スピードと体力が優れる
               @char.vitality = rand(500..1000)
-              @char.spped = rand(5..10)
-              sum = @char.vitality.to_i / 10 + @char.spped.to_i * 10
+              @char.speed = rand(5..10)
+              sum = @char.vitality.to_i / 10 + @char.speed.to_i * 10
               if sum <= 133
                 @char.attack = rand(31..40)
               elsif sum <=166
@@ -47,8 +47,8 @@ class TeamsController < ApplicationController
               end
             when 3 then # 攻撃とスピードが優れる
               @char.attack = rand(50..100)
-              @char.spped = rand(5..10)
-              sum = @char.attack.to_i + @char.spped.to_i * 10
+              @char.speed = rand(5..10)
+              sum = @char.attack.to_i + @char.speed.to_i * 10
               if sum <= 133
                 @char.vitality = rand(300..399)
               elsif sum <=166
@@ -93,7 +93,7 @@ class TeamsController < ApplicationController
               @battleChars.name = char.name
               @battleChars.vitality = char.vitality
               @battleChars.attack = char.attack
-              @battleChars.spped = char.spped
+              # @battleChars.speed = char.speed
               @battleChars.battle_id = char.battle_id
               @battleChars.movement_id = char.movement_id
               @battleChars.element_id = char.element_id
@@ -109,7 +109,7 @@ class TeamsController < ApplicationController
               @battleChars.name = char.name
               @battleChars.vitality = char.vitality
               @battleChars.attack = char.attack
-              @battleChars.spped = char.spped
+              # @battleChars.speed = char.speed
               @battleChars.battle_id = char.battle_id
               @battleChars.movement_id = char.movement_id
               @battleChars.element_id = char.element_id

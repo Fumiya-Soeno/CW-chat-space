@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200323094736) do
+ActiveRecord::Schema.define(version: 20200323125250) do
 
   create_table "battles", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name", null: false
@@ -20,7 +20,7 @@ ActiveRecord::Schema.define(version: 20200323094736) do
     t.string  "name",        null: false
     t.integer "vitality",    null: false
     t.integer "attack",      null: false
-    t.integer "spped",       null: false
+    t.integer "speed",       null: false
     t.integer "battle_id",   null: false
     t.integer "movement_id", null: false
     t.integer "element_id",  null: false
@@ -103,6 +103,13 @@ ActiveRecord::Schema.define(version: 20200323094736) do
     t.index ["user_id"], name: "index_teams_on_user_id", using: :btree
   end
 
+  create_table "teams_", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "char",       null: false
+    t.integer  "user_id",    null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name",                                null: false
     t.string   "email",                  default: "", null: false
@@ -134,12 +141,12 @@ ActiveRecord::Schema.define(version: 20200323094736) do
   add_foreign_key "chars", "elements"
   add_foreign_key "chars", "movements"
   add_foreign_key "fields", "chars"
-  add_foreign_key "fields", "teams"
+  add_foreign_key "fields", "teams_", column: "team_id"
   add_foreign_key "group_users", "groups"
   add_foreign_key "group_users", "users"
   add_foreign_key "messages", "groups"
   add_foreign_key "messages", "users"
   add_foreign_key "team_chars", "chars"
-  add_foreign_key "team_chars", "teams"
+  add_foreign_key "team_chars", "teams_", column: "team_id"
   add_foreign_key "teams", "users"
 end

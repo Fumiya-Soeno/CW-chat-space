@@ -65,7 +65,7 @@ $(function(){
   var fixStatus = function(chars,b){
     // b.attack = Math.ceil(b.attack*4/chars.length);
     b.vitality = Math.ceil(b.vitality*4/chars.length);
-    b.spped = Math.ceil(b.spped*4/chars.length);
+    b.speed = Math.ceil(b.speed*4/chars.length);
   }
 
   // 戦闘中かどうかを判定するフラグ
@@ -80,7 +80,7 @@ $(function(){
   }
 
   //攻撃関数
-  var attack = function(field_id,spped,moveValue,char_name,team,b_attack,element_id){
+  var attack = function(field_id,speed,moveValue,char_name,team,b_attack,element_id){
     // 被攻撃チームのIDを格納する変数
     var attacking_team = -1;
     // 自チームが攻撃する場合、被攻撃チームは1(敵チーム)
@@ -93,14 +93,14 @@ $(function(){
     // 攻撃を文字自身の周囲8マスに反映させるための配列
     var attackEffects = [-17,-16,-15,-1,0,1,15,16,17];
     // スピードの数値分攻撃を繰り返す
-    while(spped >= 0){
+    while(speed >= 0){
       attackEffects.forEach(e => {
         // 攻撃エフェクトを表示
-        $(`#ID_${field_id+e+(moveValue*spped)}`).css('opacity', '0').animate({'opacity': '1'}, 500);
+        $(`#ID_${field_id+e+(moveValue*speed)}`).css('opacity', '0').animate({'opacity': '1'}, 500);
         // 攻撃を実行
         $battle_chars.forEach(b => {
           // ifで敵対チームにだけ攻撃を与える
-          if(b.field_id == field_id+e+(moveValue*spped) && b.team == attacking_team){
+          if(b.field_id == field_id+e+(moveValue*speed) && b.team == attacking_team){
             // 属性相性を定義
             var ratio = 0;
             switch(element_id){
@@ -199,7 +199,7 @@ $(function(){
         })
       })
       // スピードを1減らして次のループへ。スピード0になったら終了
-      spped --;
+      speed --;
     }
   }
 
@@ -234,7 +234,7 @@ $(function(){
   }
 
   //移動関数
-  var movement = function(spped,movement_id,field_id,char_name,team,b_attack,element_id){
+  var movement = function(speed,movement_id,field_id,char_name,team,b_attack,element_id){
     // 移動型ごとに処理を分ける
     switch(movement_id){
       // 直線往復型 ひたすら上か下に進む
@@ -248,11 +248,11 @@ $(function(){
         // 移動値を定義
         var moveValue =  moveSeeds[moveSeed];
         // 移動する
-        var nextPoint = field_id + moveValue*spped + moveRightLeftSeeds[moveSeed];
+        var nextPoint = field_id + moveValue*speed + moveRightLeftSeeds[moveSeed];
         //ループ処理
         loopMovement(field_id,nextPoint,char_name,team);
         //攻撃処理
-        attack(field_id,spped,moveValue,char_name,team,b_attack,element_id);
+        attack(field_id,speed,moveValue,char_name,team,b_attack,element_id);
         break;
       // 散策型 ランダムな8方向に直進する
       case 2:
@@ -263,11 +263,11 @@ $(function(){
         // 移動値を定義
         var moveValue =  moveSeeds[moveSeed];
         // 移動する
-        var nextPoint = field_id + moveValue*spped;
+        var nextPoint = field_id + moveValue*speed;
         // ループ処理
         loopMovement(field_id,nextPoint,char_name,team);
         // 攻撃処理
-        attack(field_id,spped,moveValue,char_name,team,b_attack,element_id);
+        attack(field_id,speed,moveValue,char_name,team,b_attack,element_id);
         break;
       // 追尾型 一番近い敵を横切るように移動する
       case 3:
@@ -276,13 +276,13 @@ $(function(){
         // 0~7のランダムシードを生成
         var moveSeed = Math.round(Math.random()*7);
         // 移動値を定義
-        var moveValue =  moveSeeds[moveSeed] * spped;
+        var moveValue =  moveSeeds[moveSeed] * speed;
         // 移動する
         var nextPoint = field_id + moveValue;
         // ループ処理
         loopMovement(field_id,nextPoint,char_name,team);
         // 攻撃処理
-        attack(field_id,spped,moveValue,char_name,team,b_attack,element_id);
+        attack(field_id,speed,moveValue,char_name,team,b_attack,element_id);
         break;
     }
   }
@@ -303,7 +303,7 @@ $(function(){
     for(var num = 0;num < 16;num ++){
       chars.forEach(c => {
         if(c.name == team_chars[num]){
-          var hash = {"id":dummy_id,"name":c.name,"field_id":364+num*16-(Math.floor(team_chars.length/2)-2)*16,"char_id":c.id,"vitality":c.vitality,"attack":c.attack,"spped":c.spped,"battle_id":c.battle_id,"movement_id":c.movement_id,"element_id":c.element_id,"team":0};
+          var hash = {"id":dummy_id,"name":c.name,"field_id":364+num*16-(Math.floor(team_chars.length/2)-2)*16,"char_id":c.id,"vitality":c.vitality,"attack":c.attack,"speed":c.speed,"battle_id":c.battle_id,"movement_id":c.movement_id,"element_id":c.element_id,"team":0};
           $(`#ID_${hash.field_id}`).text(c.name);
           $reserved_id.push(hash.field_id);
           $battle_chars.push(hash);
@@ -315,7 +315,7 @@ $(function(){
               f.char_id = c.id;
             }
           })
-          var hash = {"id":dummy_id,"name":c.name,"field_id":358+num*16-(Math.floor($(this).attr("data").split("").length/2)-2)*16,"char_id":c.id,"vitality":c.vitality,"attack":c.attack,"spped":c.spped,"battle_id":c.battle_id,"movement_id":c.movement_id,"element_id":c.element_id,"team":1};
+          var hash = {"id":dummy_id,"name":c.name,"field_id":358+num*16-(Math.floor($(this).attr("data").split("").length/2)-2)*16,"char_id":c.id,"vitality":c.vitality,"attack":c.attack,"speed":c.speed,"battle_id":c.battle_id,"movement_id":c.movement_id,"element_id":c.element_id,"team":1};
           $(`#ID_${hash.field_id}`).css('opacity', '0').animate({'opacity': '1'}, 500);
           $(`#ID_${hash.field_id}`).text(c.name);
           enemy_chars.push(c.name);
@@ -369,7 +369,7 @@ $(function(){
                   }else if(b.team == 1){
                     remain_enemies ++;
                   }
-                  movement(b.spped,b.movement_id,b.field_id,b.name,b.team,b.attack,b.element_id);
+                  movement(b.speed,b.movement_id,b.field_id,b.name,b.team,b.attack,b.element_id);
                 }else if(b.vitality <= 0){
                   $(`#ID_${b.field_id}`).text("");
                   b.field_id = -1;

@@ -6,7 +6,7 @@ class CreateWars < ActiveRecord::Migration[5.0]
       t.integer :char_id
       t.integer :vitality
       t.integer :attack
-      t.integer :spped
+      t.integer :speed
       t.integer :battle_id
       t.integer :movement_id
       t.integer :element_id
