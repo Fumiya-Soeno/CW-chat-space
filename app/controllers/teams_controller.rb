@@ -77,9 +77,7 @@ class TeamsController < ApplicationController
     Field.update_all(char_id: nil,team_id: nil)
     #初期配置状態の反映
     @fields = Field.all
-    
     @enemyChar = "敵チームを下記から選択して下さい".chars
-    # @enemyChar = Team.find(rand(1..Team.all.length)).char.chars.reverse()
     @teamChar = []
     @reserved_field_id = []
     @teams.each do|team|
@@ -131,6 +129,8 @@ class TeamsController < ApplicationController
   end
 
   def win
+    @enemy = params[:content]
+    # 自チームの勝利処理
     if(Rank.exists?(team_id: $last_team_id))
       Rank.where(team_id: $last_team_id)[0].update(win: Rank.where(team_id: $last_team_id)[0].win+1)
       Rank.where(team_id: $last_team_id)[0].update(ratio:100*Rank.where(team_id: $last_team_id)[0].win/(Rank.where(team_id: $last_team_id)[0].win+Rank.where(team_id: $last_team_id)[0].lose))
@@ -138,15 +138,35 @@ class TeamsController < ApplicationController
       rank = Rank.new
       rank.update(team_id: $last_team_id, win: 1, lose: 0,ratio: 100)
     end
+
+    # 敵チームの敗北処理
+    if(Rank.exists?(team_id: @enemy))
+      Rank.where(team_id: @enemy)[0].update(lose: Rank.where(team_id: @enemy)[0].lose+1)
+      Rank.where(team_id: @enemy)[0].update(ratio:100*Rank.where(team_id: @enemy)[0].win/(Rank.where(team_id: @enemy)[0].win+Rank.where(team_id: @enemy)[0].lose))
+    else
+      rank = Rank.new
+      rank.update(team_id: @enemy, win: 0, lose: 1,ratio: 0)
+    end
   end
 
   def lose
+    @enemy = params[:content]
+    # 自チームの敗北処理
     if(Rank.exists?(team_id: $last_team_id))
       Rank.where(team_id: $last_team_id)[0].update(lose: Rank.where(team_id: $last_team_id)[0].lose+1)
       Rank.where(team_id: $last_team_id)[0].update(ratio:100*Rank.where(team_id: $last_team_id)[0].win/(Rank.where(team_id: $last_team_id)[0].win+Rank.where(team_id: $last_team_id)[0].lose))
     else
       rank = Rank.new
       rank.update(team_id: $last_team_id, win: 0, lose: 1,ratio: 0)
+    end
+
+    # 敵チームの勝利処理
+    if(Rank.exists?(team_id: @enemy))
+      Rank.where(team_id: @enemy)[0].update(win: Rank.where(team_id: @enemy)[0].win+1)
+      Rank.where(team_id: @enemy)[0].update(ratio:100*Rank.where(team_id: @enemy)[0].win/(Rank.where(team_id: @enemy)[0].win+Rank.where(team_id: @enemy)[0].lose))
+    else
+      rank = Rank.new
+      rank.update(team_id: @enemy, win: 1, lose: 0,ratio: 100)
     end
   end
 
@@ -185,7 +205,7 @@ class TeamsController < ApplicationController
     @ranks.each do|rank|
       @teams.each do|team|
         if team.id == rank.team_id
-          @team_ranks << {name: team.name,win: rank.win,lose: rank.lose, ratio: rank.ratio}
+          @team_ranks << {name: team.char,win: rank.win,lose: rank.lose, ratio: rank.ratio}
         end
       end
     end

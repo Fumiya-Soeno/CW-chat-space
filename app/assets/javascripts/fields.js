@@ -1,5 +1,6 @@
 // 初期化処理
 $(function(){ 
+  var $team_data = -1;
   var overflowFlag = 1;
   $(".war-main-chat__message-form").append("<div>Welcome to CHARACTER'S WAR!</div>");
   var $faseNum = 0;
@@ -288,6 +289,7 @@ $(function(){
 
   //チーム選択
   $(".team").on('click', function(){
+    $team_data = $(this).attr("team_id")
     // 予約済みマスをリセット
     $reserved_id = [];
     enemy_chars = [];
@@ -330,7 +332,6 @@ $(function(){
         fixStatus(team_chars,b);
       }
     })
-    console.log($battle_chars);
     identifyColor();
   })
 
@@ -351,7 +352,6 @@ $(function(){
     var remain_enemies = 0;
     //勝敗がついていない場合だけ実行する
     if(battleStartFlag == 1){
-      //移動関数実行対象マス決定用変数 デフォルトは0で1ずつ増える
       //非同期通信
       $.ajax({
         type: 'GET',
@@ -390,16 +390,20 @@ $(function(){
               $(".war-main-chat__message-form").append("<div>YOU WIN!</div>");
               battleStartFlag = 0;
               $.ajax({
+                url: $("#field").attr('win'),
                 type: 'GET',
-                url: $("#field").attr('win')
+                data: { content: $team_data },
+                datatype: "json"
               })
             }else if(remain_chars == 0){
               overflowFlag = 0;
               $(".war-main-chat__message-form").append("<div>YOU LOSE...!</div>");
               battleStartFlag = 0;
               $.ajax({
+                url: $("#field").attr('lose'),
                 type: 'GET',
-                url: $("#field").attr('lose')
+                data: { content: $team_data },
+                datatype: "json"
               })
             }
           }

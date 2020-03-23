@@ -5,11 +5,6 @@
       %ul
         - team.errors.full_messages.each do |message|
           %li= message
-  .chat-group-form__field
-    .chat-group-form__field--left
-      = f.label :name, class: 'chat-group-form__label'
-    .chat-group-form__field--right
-      = f.text_field :name, class: 'chat__group_name chat-group-form__input', placeholder: 'チーム名を入力してください'      
 
   .chat-group-form__field
     .chat-group-form__field--left

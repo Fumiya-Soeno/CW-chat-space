@@ -7,6 +7,7 @@ Rails.application.routes.draw do
         get 'war'
         get 'win'
         get 'lose'
+        get 'ememy'
       end
     end
   end

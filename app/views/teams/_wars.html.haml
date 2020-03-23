@@ -1,4 +1,4 @@
-#field{:faseNum => 0,:action => war_user_teams_path(current_user),:name => "data[data]",:win => win_user_teams_path(current_user),:lose => lose_user_teams_path(current_user)}
+#field{:enemy => ememy_user_teams_path(current_user), :faseNum => 0,:action => war_user_teams_path(current_user),:name => "data[data]",:win => win_user_teams_path(current_user),:lose => lose_user_teams_path(current_user)}
   - for j in 1..16 do
     .fields{class: "d-none"}
       - @fields.each.with_index(1) do|f,i|
@@ -34,9 +34,9 @@
 %br
 %br
 - @teams.each do |team|
-  .team{id: "team#{team.id}", data: "#{team.char}"}
+  .team{id: "team#{team.id}", data: "#{team.char}", team_id: "#{team.id}"}
     - if team.char != "敵チームを下記から選択して下さい"
-      = "【TEAM】#{team.name} 【CHAR】#{team.char}"
+      = "id#{team.id}:#{team.char}"
 
 %br
 ランキング

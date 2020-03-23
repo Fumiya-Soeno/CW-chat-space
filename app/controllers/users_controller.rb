@@ -34,7 +34,7 @@ class UsersController < ApplicationController
     @ranks.each do|rank|
       @teams.each do|team|
         if team.id == rank.team_id
-          @team_ranks << {name: team.name,win: rank.win,lose: rank.lose, ratio: rank.ratio}
+          @team_ranks << {name: team.char,win: rank.win,lose: rank.lose, ratio: rank.ratio}
         end
       end
     end
