@@ -1,6 +1,13 @@
 class GroupsController < ApplicationController
 
   def index
+    # for num in 1..768 do
+    #   @fields = Field.new
+    #   @fields.id = num
+    #   @fields.char_id = nil
+    #   @fields.team_id = nil
+    #   @fields.save
+    # end
   end
 
   def new

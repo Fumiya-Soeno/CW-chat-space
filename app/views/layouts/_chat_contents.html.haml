@@ -1,0 +1,46 @@
+- current_user.teams.each do |team|
+  - if(user_teams_path(team.id) == request.path)
+    - team.char.chars.each do|t|
+      - @chars.each do|char|
+        - if(char.name == t)
+          .char_block
+            .war-main-chat__message-list__char-name
+              - if char.element_id == 1
+                .fire.charname
+                  = char.name
+              - if char.element_id == 2
+                .water.charname
+                  = char.name
+              - if char.element_id == 3
+                .wood.charname
+                  = char.name
+              - if char.element_id == 4
+                .lightness.charname
+                  = char.name
+              - if char.element_id == 5
+                .darkness.charname
+                  = char.name
+              .status
+                - @movements.each do|movement|
+                  - if(movement.id == char.movement_id)
+                    = movement.name
+                    %br
+                %div
+                  %span 生命
+                  .params
+                    - for num in 1..(char.vitality/50).to_i do
+                      %span ■
+                    %br
+                %div
+                  %span 攻力
+                  .params
+                    - for num in 1..(char.attack/5).to_i do
+                      %span ■
+                    %br
+                %div
+                  %span 速度
+                  .params
+                    - for num in 1..(char.speed*2).to_i do
+                      %span ■
+                    %br
+                %br

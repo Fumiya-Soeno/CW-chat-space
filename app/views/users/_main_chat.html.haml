@@ -1,0 +1,7 @@
+.war-main-chat
+  = render "layouts/chat_header"
+  .war-main-chat__message-list
+    - @team_ranks.each.with_index(1) do|team_rank,i|
+      .ranking
+        = "#{i}位:勝率#{team_rank[:ratio]}% #{team_rank[:win]}勝 #{team_rank[:lose]}敗「#{team_rank[:name]}」"
+  = render "layouts/chat_footer"

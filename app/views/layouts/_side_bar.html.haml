@@ -1,0 +1,15 @@
+.war-side-bar
+  .war-side-bar__user-name
+    .war-side-bar__user-name__name-box
+      .war-side-bar__user-name__name-box__user
+        = current_user.name
+      .war-side-bar__user-name__name-box__icon
+        = link_to new_user_team_path(current_user) do
+          = icon('far', 'edit')
+        = link_to edit_user_path(current_user) do
+          = icon('fas', 'cog')
+  .war-side-bar__group-list
+    - current_user.teams.each do |team|
+      = link_to user_teams_path(team) do
+        .war-side-bar__group-list__latest-message
+          = "#{team.char}"

@@ -1,3 +1,6 @@
+html{
+  font-family:monospace;
+}
 @import "reset";
 @import "config/colors";
 @import "modules/messages";
@@ -6,3 +9,5 @@
 @import "modules/user";
 @import "modules/flash";
 @import "modules/group";
+@import "modules/teams";
+@import "modules/wars";

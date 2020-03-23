@@ -41,6 +41,7 @@ $(function(){
       dataType: 'json'
     })
     .done(function(users) {
+      console.log(url);
       $("#user-search-result").empty();
       users.forEach(user=>{
         html = buildHTML(user);

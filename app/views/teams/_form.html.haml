@@ -1,0 +1,18 @@
+= form_for(team, url: user_teams_path(current_user))  do |f|
+  - if team.errors.any?
+    .chat-group-form__errors
+      %h2= "#{team.errors.full_messages.count}件のエラーが発生しました。"
+      %ul
+        - team.errors.full_messages.each do |message|
+          %li= message
+
+  .chat-group-form__field
+    .chat-group-form__field--left
+      = f.label :char, class: 'chat-group-form__label'
+    .chat-group-form__field--right
+      = f.text_field :char, class: 'chat__group_name chat-group-form__input', id: 'text-field', placeholder: '文字列を入力してください'      
+
+  .chat-group-form__field.clearfix
+    .chat-group-form__field--left
+    .chat-group-form__field--right
+      = f.submit class: 'chat-group-form__action-btn', id: 'submit-btn', action: user_teams_path(@user)

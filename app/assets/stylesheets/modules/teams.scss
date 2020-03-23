@@ -1,0 +1,225 @@
+* {
+  box-sizing: border-box;
+}
+
+$CLwhite:   #999;
+$CLbrown:   #999;
+$CLblue: #38aef0;
+$CLgray: #434a54;
+
+.wrapper {
+  display: flex;
+}
+
+.war-side-bar {
+  float: left;
+  width: 300px;
+  color: $CLwhite;
+  font-weight: bold;
+  &__user-name {
+    height: 100px;
+    display: flex;
+    padding: 0 20px;
+    align-items: center;
+    background-color: #410000;
+    &__name-box{
+      width: 300px;
+      height: 20px;
+      display: flex;
+      line-height: 20px;
+      justify-content: space-between;
+      &__user {
+        font-size: 16px;
+      }
+      a {
+        color: $CLwhite;
+        text-decoration: none;
+      }
+    }
+  }
+  &__group-list {
+    height: calc(100vh - 100px);
+    background-color: #6D0000;
+    overflow: scroll; 
+    a {
+      text-decoration: none;
+      color: $CLwhite;
+    }
+    &__latest-message{
+      font-size: 16px;
+      padding: 20px 20px;
+      &:hover{
+        background-color: #8D0000;
+      }
+    }
+  }
+}
+
+.war-main-chat {
+  float: left;
+  width: calc(100vw - 300px);
+  &__group-info{
+    background-color: #000;
+    color: #333;
+    height: 100px;
+    display: flex;
+    padding: 0 40px;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #333;
+    a {
+      text-decoration: none;
+    }
+    &__left-box{
+      &__current-group {
+        font-size: 20px;
+        color: #660000;
+        font-weight: bold;
+      }
+      &__members-list {
+        color: $CLbrown;
+        font-size: 12px;
+        &__member {
+          display: inline;
+        }
+      }
+    }
+    &__right-box{
+      display: flex;
+      &__btn {
+        height: 40px;
+        font-size: 16px;
+        line-height: 40px;
+        text-align: center;
+        &_chat {
+          margin: 0 5px;
+          width: 80px;
+          color: #999;
+          border: 1px solid #999;
+        }
+      }
+    }
+
+  }
+  .char_block{
+    height:76px;
+    margin: 20px 0;
+    cursor: default;
+    &:hover{
+      background-color: #2c2c2c;
+    }
+  }
+  &__message-list {
+    padding: 46px 40px;
+    height: calc(100vh - 190px);
+    background-color: #1E1E1E;
+    overflow: scroll;
+    color: $CLwhite;
+    .ranking{
+      font-size: 32px;
+      font-weight: bold;
+      padding: 10px 0;
+    }
+    .params{
+      display: inline-block;
+      color: #090;
+      letter-spacing: -4px;
+    }
+    .charname{
+      font-size: 76px;
+      line-height: 76px;
+      width: 76px;
+      height: 76px;
+      float: left;
+      text-align: center;
+      margin-right: 20px;
+    }
+    .fire{
+      color: #c00;
+    }
+    .water{
+      color: #00c;
+    }
+    .wood{
+      color: #0c0;
+    }
+    .lightness{
+      color: #cc0;
+    }
+    .darkness{
+      color: #80c;
+    }
+    #field{
+      display: flex;
+      .d-none{
+        display: none;
+      }
+      .fields{
+        background-color: #000;
+        width: 40px;
+        text-align: center;
+        .d-none{
+          display: none;
+          background-color: #c00;
+        }
+        .field{
+          font-weight: bold;
+          height: 40px;
+          line-height: 40px;
+          border:1px solid #eee;
+          .status{
+            color:#000;
+            display: none;
+            background-color: #fff;
+            position: absolute;
+            bottom:0px;
+            right:0px;
+          }
+        }
+      }
+    }
+    .team{
+      cursor: pointer;
+      &:hover{
+        background-color: #999;
+        color: #fff;
+        font-weight: bold;
+      }
+    }
+    &__message {
+      padding-bottom: 40px;
+      &__upper {
+        margin-bottom: 10px;
+        &__user {
+          display: inline;
+          font-weight: bold;
+        }
+        &__date {
+          color: $CLbrown;
+          font-size: 12px;
+          display: inline;
+          margin-left: 12px;
+        }
+      }
+      &__main {
+        color: $CLgray;
+      }
+    }
+  }
+  &__message-form {
+    color: #fff;
+    font-weight: bold;
+    font-size: 20px;
+    padding:0 40px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    background-color: #333;
+    display: flex;
+    flex-flow: column;
+    overflow: scroll;
+    div{
+      width: 100%;
+    }
+  }
+}

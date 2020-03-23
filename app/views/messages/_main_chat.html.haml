@@ -4,13 +4,19 @@
       .main-chat__group-info__left-box__current-group
         = @group.name
       .main-chat__group-info__left-box__members-list
-        Member :
+        Member : 
         .main-chat__group-info__left-box__members-list__member
         - @members.each do |member|
           = User.find(member.user_id).name
-    = link_to edit_group_path(@group) do
-      .main-chat__group-info__edit-btn
-        Edit
+    .main-chat__group-info__right-box
+      .main-chat__group-info__right-box__btn
+        = link_to users_path do
+          .main-chat__group-info__right-box__btn_war
+            WAR
+      .main-chat__group-info__right-box__btn
+        = link_to edit_group_path(@group) do
+          .main-chat__group-info__right-box__btn_edit
+            Edit
   .main-chat__message-list
     = render @messages
 
