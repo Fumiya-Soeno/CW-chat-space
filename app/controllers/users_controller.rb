@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  before_action :set_params
 
   def index
     return nil if params[:keyword] == ""
@@ -24,5 +25,10 @@ class UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(:name, :email)
+  end
+
+  def set_params
+    @ranks = Rank.all
+    @teams = Team.all
   end
 end

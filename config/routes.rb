@@ -5,6 +5,8 @@ Rails.application.routes.draw do
     resources :teams, only: [:new ,:index ,:create]do
       collection do
         get 'war'
+        get 'win'
+        get 'lose'
       end
     end
   end

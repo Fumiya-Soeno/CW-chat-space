@@ -1,4 +1,4 @@
-#field{:faseNum => 0,:action => war_user_teams_path(current_user),:name => "data[data]"}
+#field{:faseNum => 0,:action => war_user_teams_path(current_user),:name => "data[data]",:win => win_user_teams_path(current_user),:lose => lose_user_teams_path(current_user)}
   - for j in 1..16 do
     .fields{class: "d-none"}
       - @fields.each.with_index(1) do|f,i|
@@ -30,10 +30,9 @@
               - if char.id == f.char_id
                 = char.name
 %br
-= "対戦相手を選んでください"
+= "敵チームを下記から選択して下さい"
 %br
 %br
 - @teams.each do |team|
-  -# - if team.user_id != current_user.id
   .team{id: "team#{team.id}", data: "#{team.char}"}
     = "【TEAM】#{team.name} 【CHAR】#{team.char}"

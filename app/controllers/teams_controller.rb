@@ -68,6 +68,8 @@ class TeamsController < ApplicationController
     end
   end
 
+  
+
   def war
     War.delete_all
     #Fieldの初期化
@@ -75,7 +77,7 @@ class TeamsController < ApplicationController
     #初期配置状態の反映
     @fields = Field.all
     
-    @enemyChar = "メリッサ・キンレンカ".chars.reverse()
+    @enemyChar = "敵チームを下記から選択して下さい".chars
     # @enemyChar = Team.find(rand(1..Team.all.length)).char.chars.reverse()
     @teamChar = []
     @reserved_field_id = []
@@ -125,6 +127,26 @@ class TeamsController < ApplicationController
       format.html
     end
     @battleChars = War.all
+  end
+
+  def win
+    if(Rank.exists?(team_id: $last_team_id))
+      Rank.where(team_id: $last_team_id)[0].update(win: Rank.where(team_id: $last_team_id)[0].win+1)
+      Rank.where(team_id: $last_team_id)[0].update(ratio:100*Rank.where(team_id: $last_team_id)[0].win/(Rank.where(team_id: $last_team_id)[0].win+Rank.where(team_id: $last_team_id)[0].lose))
+    else
+      rank = Rank.new
+      rank.update(team_id: $last_team_id, win: 1, lose: 0,ratio: 100)
+    end
+  end
+
+  def lose
+    if(Rank.exists?(team_id: $last_team_id))
+      Rank.where(team_id: $last_team_id)[0].update(lose: Rank.where(team_id: $last_team_id)[0].lose+1)
+      Rank.where(team_id: $last_team_id)[0].update(ratio:100*Rank.where(team_id: $last_team_id)[0].win/(Rank.where(team_id: $last_team_id)[0].win+Rank.where(team_id: $last_team_id)[0].lose))
+    else
+      rank = Rank.new
+      rank.update(team_id: $last_team_id, win: 0, lose: 1,ratio: 0)
+    end
   end
 
   private

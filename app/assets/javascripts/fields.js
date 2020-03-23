@@ -1,5 +1,8 @@
 // 初期化処理
 $(function(){ 
+  var overflowFlag = 1;
+  $(".war-main-chat__message-form").append("<div>Welcome to CHARACTER'S WAR!</div>");
+  var $faseNum = 0;
 
   var identifyColor = function(){
   // チームの色分け
@@ -7,25 +10,26 @@ $(function(){
     fields.forEach(f =>{
       // team == 1なら敵チーム
       if(f.char_id == b.char_id && b.team == 1){
-        $(`#ID_${b.field_id}`).css("transform","rotate(180deg)");
         $(`#ID_${b.field_id}`).css("color","#f00");
       // team == 0なら自チーム
-      }else if(f.char_id == b.char_id && b.team == 0){
-        $(`#ID_${b.field_id}`).css("transform","rotate(0deg)");
+      }
+      if(f.char_id == b.char_id && b.team == 0){
         $(`#ID_${b.field_id}`).css("color","#0f0");
       }
     })
   })
   }
 
-  // 
+  // 自チームと敵チームの文字列のみ格納する変数(配列)
   var team_chars = [];
+  var enemy_chars = [];
   // 戦闘に必要な文字のパラメータをテーブルから受け取り、格納するグローバル変数(配列)
   var $battle_chars = [];
   // フィールドの情報をテーブルから受け取り、格納する変数(配列)
   var fields = [];
   // charsテーブルの情報を格納する変数(配列)
   var chars = [];
+  
   //ビューに初期値を渡すために非同期通信を使用する
   $.ajax({
     type: 'GET',
@@ -38,18 +42,30 @@ $(function(){
       data.team_chars.forEach(t =>{
         team_chars.push(t);
       })
-      data.battle_chars.forEach(d =>{
-        $battle_chars.push(d);
+      data.battle_chars.forEach(b =>{
+        $battle_chars.push(b);
       })
-      data.fields.forEach(d => {
-        fields.push(d);
+      data.fields.forEach(f => {
+        fields.push(f);
       })
       data.chars.forEach(c =>{
         chars.push(c);
       })
-    identifyColor();
+      $battle_chars.forEach( b => {
+        if(b.team == 1){
+          enemy_chars.push(b.name);
+        }
+      })
+      identifyColor();
     }
   })
+
+  // ステータス調整用関数
+  var fixStatus = function(chars,b){
+    // b.attack = Math.ceil(b.attack*4/chars.length);
+    b.vitality = Math.ceil(b.vitality*4/chars.length);
+    b.spped = Math.ceil(b.spped*4/chars.length);
+  }
 
   // 戦闘中かどうかを判定するフラグ
   var battleStartFlag = 0;
@@ -165,19 +181,19 @@ $(function(){
                 }
                 break;
             }
-            // 
-            console.log(`${b.name} HP${parseInt(b.vitality-b_attack*ratio)}`);
+            // ダメージ分の体力を減らす処理
+            b.vitality -= parseInt(b_attack*ratio);
             var teamText;
             if(b.team == 0){
               teamText = "あなた";
-            }else{
+            }
+            if(b.team == 1){
               teamText = "敵";
             }
             if(b.vitality <= 0){
-              console.log(`${teamText}の「 ${b.name} 」は死んだ！`)
+              $(".war-main-chat__message-form").append(`<div>${teamText}の「 ${b.name} 」が退場！</div>`);
+              $('.war-main-chat__message-form').animate({ scrollTop: $('.war-main-chat__message-form')[0].scrollHeight},10);
             }
-            // ダメージ分の体力を減らす処理
-            b.vitality -= parseInt(b_attack*ratio);
           }
         })
       })
@@ -187,7 +203,7 @@ $(function(){
   }
 
   // 移動および画面左右端でのループ処理
-  var loopMovement = function(field_id,nextPoint,char_name){
+  var loopMovement = function(field_id,nextPoint,char_name,team){
     // 左端から右端にループする
     if(nextPoint < 256){
       nextPoint += (256 -1);
@@ -208,7 +224,7 @@ $(function(){
     $reserved_id.push(nextPoint);
     // nextPointが確定したので、文字の位置(b.field_id)を更新する
     $battle_chars.forEach(b =>{
-      if(b.name == char_name){
+      if(b.name == char_name && b.team == team){
         b.field_id = nextPoint;
       }
     })
@@ -233,7 +249,7 @@ $(function(){
         // 移動する
         var nextPoint = field_id + moveValue*spped + moveRightLeftSeeds[moveSeed];
         //ループ処理
-        loopMovement(field_id,nextPoint,char_name);
+        loopMovement(field_id,nextPoint,char_name,team);
         //攻撃処理
         attack(field_id,spped,moveValue,char_name,team,b_attack,element_id);
         break;
@@ -248,7 +264,7 @@ $(function(){
         // 移動する
         var nextPoint = field_id + moveValue*spped;
         // ループ処理
-        loopMovement(field_id,nextPoint,char_name);
+        loopMovement(field_id,nextPoint,char_name,team);
         // 攻撃処理
         attack(field_id,spped,moveValue,char_name,team,b_attack,element_id);
         break;
@@ -263,7 +279,7 @@ $(function(){
         // 移動する
         var nextPoint = field_id + moveValue;
         // ループ処理
-        loopMovement(field_id,nextPoint,char_name);
+        loopMovement(field_id,nextPoint,char_name,team);
         // 攻撃処理
         attack(field_id,spped,moveValue,char_name,team,b_attack,element_id);
         break;
@@ -272,40 +288,59 @@ $(function(){
 
   //チーム選択
   $(".team").on('click', function(){
+    // 予約済みマスをリセット
+    $reserved_id = [];
+    enemy_chars = [];
+    // 全てのマスを空にする
     fields.forEach(f => {
       $(`#ID_${f.id}`).text("");
     })
+    // 文字一覧をリセット
     $battle_chars = [];
+    dummy_id = 0;
     for(var num = 0;num < 16;num ++){
       chars.forEach(c => {
         if(c.name == team_chars[num]){
-          var hash = {"id":c.id,"name":c.name,"field_id":364+num*16-(Math.floor(team_chars.length/2)-2)*16,"vitality":c.vitality,"attack":c.attack,"spped":c.spped,"battle_id":c.battle_id,"movement_id":c.movement_id,"element_id":c.element_id,"team":0};
+          var hash = {"id":dummy_id,"name":c.name,"field_id":364+num*16-(Math.floor(team_chars.length/2)-2)*16,"char_id":c.id,"vitality":c.vitality,"attack":c.attack,"spped":c.spped,"battle_id":c.battle_id,"movement_id":c.movement_id,"element_id":c.element_id,"team":0};
           $(`#ID_${hash.field_id}`).text(c.name);
+          $reserved_id.push(hash.field_id);
           $battle_chars.push(hash);
-        }else if(c.name == $(this).attr("data").split("")[num]){
-          var hash = {"id":c.id,"name":c.name,"field_id":358+num*16-(Math.floor(team_chars.length/2)-2)*16,"vitality":c.vitality,"attack":c.attack,"spped":c.spped,"battle_id":c.battle_id,"movement_id":c.movement_id,"element_id":c.element_id,"team":1};
+          dummy_id ++;
+        }
+        if(c.name == $(this).attr("data").split("")[num]){
+          fields.forEach(f =>{
+            if(f.id == 358+num*16-(Math.floor($(this).attr("data").split("").length/2)-2)*16){
+              f.char_id = c.id;
+            }
+          })
+          var hash = {"id":dummy_id,"name":c.name,"field_id":358+num*16-(Math.floor($(this).attr("data").split("").length/2)-2)*16,"char_id":c.id,"vitality":c.vitality,"attack":c.attack,"spped":c.spped,"battle_id":c.battle_id,"movement_id":c.movement_id,"element_id":c.element_id,"team":1};
+          $(`#ID_${hash.field_id}`).css('opacity', '0').animate({'opacity': '1'}, 500);
           $(`#ID_${hash.field_id}`).text(c.name);
+          enemy_chars.push(c.name);
+          $reserved_id.push(hash.field_id);
           $battle_chars.push(hash);
+          dummy_id ++;
         }
       })
     }
-    console.log($battle_chars);
-    $battle_chars.forEach(b => {
-      fields.forEach(f =>{
-        if(f.char_id == b.char_id && b.team == 1){
-          // $(`#ID_${b.field_id}`).css("background","#c00");
-        }
-      })
+    $battle_chars.forEach( b =>{
+      if(b.team == 1){
+        fixStatus(enemy_chars,b);
+      }else{
+        fixStatus(team_chars,b);
+      }
     })
+    console.log($battle_chars);
+    identifyColor();
   })
 
   // クリックで戦闘開始
   $("#field").on('click', function(){
-    if(battleStartFlag == 0){
+    if(battleStartFlag == 0 && overflowFlag == 1){
       // 勝敗がついた後に停止するための変数
       battleStartFlag = 1;
-      // 500msごとに画面を更新
-      setInterval(reloadFields, 500);
+      // 画面を更新
+      setInterval(reloadFields, 300);
     }
   });
 
@@ -317,23 +352,17 @@ $(function(){
     //勝敗がついていない場合だけ実行する
     if(battleStartFlag == 1){
       //移動関数実行対象マス決定用変数 デフォルトは0で1ずつ増える
-      var faseNum = Number($("#field").attr('faseNum'));
       //非同期通信
       $.ajax({
         type: 'GET',
         url: $("#field").attr('action'),
         dataType: 'json',
         success: function(){
-          $battle_chars.forEach(b => {
-            fields.forEach(field => {
-              if(field.char_id == b.char_id){
-                // 空じゃないマスのfaseNumを+1する
-                $(`#ID_${field.id}`).attr('faseNum',faseNum+1);
-              }
-              // faseNumが1多い行だけ移動関数を実行
-              if(field.char_id == b.char_id && Number($(`#ID_${field.id}`).attr('faseNum')) == faseNum+1){
-                // マスを全て空にする
-                $(`#ID_${b.field_id}`).text("");
+          $reserved_id.forEach(r => {
+            // 全てのマスを空にする
+            $(`#ID_${r}`).text("");
+            $battle_chars.forEach(b => {
+              if(r == b.field_id){
                 if(b.vitality > 0){
                   if(b.team == 0){
                     remain_chars ++;
@@ -345,24 +374,36 @@ $(function(){
                   $(`#ID_${b.field_id}`).text("");
                   b.field_id = -1;
                 }
-                // faseNumを元の値に戻す
-                $(`#ID_${field.id}`).attr('faseNum',faseNum);
               }
-            });
+            })
           })
-          // faseNumを次のターンに向けて1増やす
-          faseNum += 1;
-          $("#field").attr('faseNum',faseNum);
-          if(remain_chars == 0 && remain_enemies == 0){
-            console.log("DRAW.");
-            battleStartFlag = 0;
-          }else if(remain_enemies == 0){
-            console.log("YOU WIN!!");
-            battleStartFlag = 0;
-          }else if(remain_chars == 0){
-            console.log("名取さな LOSE!!");
-            battleStartFlag = 0;
+          // $faseNumを次のターンに向けて1増やす
+          $faseNum += 1;
+          // 勝敗を判定する
+          if(overflowFlag == 1){
+            if(remain_chars == 0 && remain_enemies == 0){
+              overflowFlag = 0;
+              $(".war-main-chat__message-form").append("<div>DRAW.</div>");
+              battleStartFlag = 0;
+            }else if(remain_enemies == 0){
+              overflowFlag = 0;
+              $(".war-main-chat__message-form").append("<div>YOU WIN!</div>");
+              battleStartFlag = 0;
+              $.ajax({
+                type: 'GET',
+                url: $("#field").attr('win')
+              })
+            }else if(remain_chars == 0){
+              overflowFlag = 0;
+              $(".war-main-chat__message-form").append("<div>YOU LOSE...!</div>");
+              battleStartFlag = 0;
+              $.ajax({
+                type: 'GET',
+                url: $("#field").attr('lose')
+              })
+            }
           }
+          $('.war-main-chat__message-form').animate({ scrollTop: $('.war-main-chat__message-form')[0].scrollHeight},10);
           identifyColor();
           }
         })

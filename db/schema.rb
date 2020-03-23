@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200320065912) do
+ActiveRecord::Schema.define(version: 20200323034018) do
 
   create_table "battles", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name", null: false
@@ -79,6 +79,13 @@ ActiveRecord::Schema.define(version: 20200320065912) do
 
   create_table "movements", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name", null: false
+  end
+
+  create_table "ranks", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer "win"
+    t.integer "lose"
+    t.integer "ratio"
+    t.integer "team_id"
   end
 
   create_table "team_chars", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

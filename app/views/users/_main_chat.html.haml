@@ -1,4 +1,10 @@
 .war-main-chat
   = render "layouts/chat_header"
   .war-main-chat__message-list
+    - @ranks.each do|rank|
+      - @teams.each do|team|
+        - if team.id == rank.team_id
+          %div
+            = team.name
+            = rank.ratio
   = render "layouts/chat_footer"
