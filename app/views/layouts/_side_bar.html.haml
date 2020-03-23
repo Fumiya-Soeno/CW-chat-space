@@ -11,7 +11,5 @@
   .war-side-bar__group-list
     - current_user.teams.each do |team|
       = link_to user_teams_path(team) do
-        .war-side-bar__group-list__group-name
-          = "【TEAM】#{team.name}"
         .war-side-bar__group-list__latest-message
-          = "【CHAR】#{team.char}"
+          = "#{team.char}"

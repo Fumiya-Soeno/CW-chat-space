@@ -35,4 +35,11 @@
 %br
 - @teams.each do |team|
   .team{id: "team#{team.id}", data: "#{team.char}"}
-    = "【TEAM】#{team.name} 【CHAR】#{team.char}"
+    - if team.char != "敵チームを下記から選択して下さい"
+      = "【TEAM】#{team.name} 【CHAR】#{team.char}"
+
+%br
+ランキング
+- @team_ranks.each.with_index(1) do|team_rank,i|
+  %div
+    = "RANK#{i}:勝率#{team_rank[:ratio]}%:#{team_rank[:name]}"

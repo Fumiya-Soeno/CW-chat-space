@@ -28,7 +28,16 @@ class UsersController < ApplicationController
   end
 
   def set_params
-    @ranks = Rank.all
+    @team_ranks = [];
+    @ranks = Rank.all.order(ratio: "DESC")
     @teams = Team.all
+    @ranks.each do|rank|
+      @teams.each do|team|
+        if team.id == rank.team_id
+          @team_ranks << {name: team.name,win: rank.win,lose: rank.lose, ratio: rank.ratio}
+        end
+      end
+    end
   end
+  
 end

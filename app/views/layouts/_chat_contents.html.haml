@@ -1,34 +1,46 @@
 - current_user.teams.each do |team|
   - if(user_teams_path(team.id) == request.path)
-    = "【TEAM】#{team.name}"
-    = "【CHAR】#{team.char}"
-    %br
-    %br
     - team.char.chars.each do|t|
       - @chars.each do|char|
         - if(char.name == t)
-          .war-main-chat__message-list__char-name
-            = "#{char.name}:"
-            - @battles.each do|battle|
-              - if(battle.id == char.battle_id)
-                = "#{battle.name}"
-            - @movements.each do|movement|
-              - if(movement.id == char.movement_id)
-                = ",#{movement.name}"
-            - @elements.each do|element|
-              - if(element.id == char.element_id)
-                = ",#{element.name}"
+          .char_block
+            .war-main-chat__message-list__char-name
+              - if char.element_id == 1
+                .fire.charname
+                  = char.name
+              - if char.element_id == 2
+                .water.charname
+                  = char.name
+              - if char.element_id == 3
+                .wood.charname
+                  = char.name
+              - if char.element_id == 4
+                .lightness.charname
+                  = char.name
+              - if char.element_id == 5
+                .darkness.charname
+                  = char.name
+              .status
+                - @movements.each do|movement|
+                  - if(movement.id == char.movement_id)
+                    = movement.name
+                    %br
+                %div
+                  %span 生命
+                  .params
+                    - for num in 1..(char.vitality/50).to_i do
+                      %span ■
+                    %br
+                %div
+                  %span 攻力
+                  .params
+                    - for num in 1..(char.attack/5).to_i do
+                      %span ■
+                    %br
+                %div
+                  %span 速度
+                  .params
+                    - for num in 1..(char.spped*2).to_i do
+                      %span ■
+                    %br
                 %br
-            = "生命"
-            - for num in 1..(char.vitality/50).to_i do
-              |
-            %br
-            = "攻力"
-            - for num in 1..(char.attack/5).to_i do
-              |
-            %br
-            = "速度"
-            - for num in 1..(char.spped*2).to_i do
-              |
-            %br
-            %br

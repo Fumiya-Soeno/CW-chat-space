@@ -1,5 +1,6 @@
 class TeamsController < ApplicationController
   before_action :set_user
+  before_action :set_params
   before_action :set_char_params
   before_action :set_team_params
   before_action :set_exist_chars
@@ -177,4 +178,17 @@ class TeamsController < ApplicationController
     end
   end
 
+  def set_params
+    @team_ranks = [];
+    @ranks = Rank.all.order(ratio: "DESC")
+    @teams = Team.all
+    @ranks.each do|rank|
+      @teams.each do|team|
+        if team.id == rank.team_id
+          @team_ranks << {name: team.name,win: rank.win,lose: rank.lose, ratio: rank.ratio}
+        end
+      end
+    end
+  end
+  
 end
